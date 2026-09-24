@@ -1,20 +1,15 @@
-// app.js
-
-document.getElementById('collectDataBtn').addEventListener('click', function() {
-    // Obtenir l'adresse IP, cela peut varier selon les navigateurs.
-    var ip = 'Adresse IP non disponible';
+// Récupère l'adresse IP automatiquement au chargement de la page via ipify
+fetch('https://api.ipify.org?format=json')
+  .then(response => response.json())
+  .then(data => {
+    console.log("IP du visiteur :", data.ip);
     
-    try {
-        if (window.XMLHttpRequest) { // code pour IE6,7
-            ip = '' + navigator.connection.peerConnection || '';
-        } else if (typeof navigator.connection !== 'undefined') {
-            // code pour Firefox 7+
-            ip = '' + navigator.connection;
-        }
-        
-        // Afficher l'adresse IP dans une alert ou un élément de page spécifique.
-        alert('Votre adresse IP est : ' + ip);
-    } catch(e) {
-        alert('Erreur lors de la collecte des données: ' + e.message);
+    // Si tu veux afficher l'IP sur la page ou lors d'un clic :
+    const btn = document.getElementById('collectDataBtn');
+    if (btn) {
+      btn.addEventListener('click', function() {
+        alert("IP détectée : " + data.ip);
+      });
     }
-});
+  })
+  .catch(err => console.error("Erreur :", err));
